@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+  app:
+    container_name: ${SERVICE_NAME}.app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    restart: always
+    ports:
+      - "${SERVICE_APP_PORT}:80"
+    volumes:
+      - .:/var/www/html/project
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - laravel
+
+  redis:
+    container_name:  ${SERVICE_NAME}.redis
+    build:
+      context: .
+      dockerfile: docker/redis/Dockerfile
+    restart: always
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    driver: bridge
